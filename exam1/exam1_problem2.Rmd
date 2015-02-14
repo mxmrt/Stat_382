@@ -1,0 +1,48 @@
+---
+title: "Stat 381: Exam 1, Problem 2"
+author: "Max Martinelli"
+date: "February 13, 2015"
+output: html_document
+---
+##### Updates:
+* *2/13/15, 8:00pm: Changed document title, and fixed non-computational error that displayed collective BMI mean instead of the mean for the subset of females.* 
+
+### Initial Step
+First, we load the data into `R` and preview the data.
+
+```{r}
+data = read.csv('/Users/Max/Desktop/Exam1.csv')
+head(data)
+```
+
+### Part 1
+Compute the mean, standard deviation, 5th, 25th, median, 75th, 95th quantile, as well as 95% confidence interval of the mean of BMI.  
+
+```{r}
+bmi_mean = mean(data$BMI); bmi_mean
+bmi_sd = sd(data$BMI); bmi_sd
+bmi_quantile = quantile(data$BMI, probs = c(.05, .25, .5, .75, .95))
+bmi_quantile
+error <- qt(0.975,df=length(data$BMI)-1)*sd(data$BMI)/sqrt(length(data$BMI))
+error
+conf_interval = bmi_mean + c(-1,1)*error
+conf_interval
+```
+
+### Part 2
+Compute 90% confidence interval of the proportion of female.
+
+```{r}
+fem_data = data[data$FEMALE==1,]
+fem_bmi_mean = mean(fem_data$BMI); fem_bmi_mean
+fem_error <- qt(0.95,df=length(fem_data$BMI)-1)*sd(fem_data$BMI)/sqrt(length(fem_data$BMI))
+fem_error
+fem_conf_interval = fem_bmi_mean + c(-1,1)*fem_error
+fem_conf_interval
+```
+
+
+
+
+
+

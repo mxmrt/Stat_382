@@ -1,0 +1,49 @@
+---
+title: "Stat 381: Exam 1, Problem 1"
+author: "Max Martinelli"
+date: "February 13, 2015"
+output: html_document
+---
+##### Updates:
+* *2/13/15, 8:00pm: Changed document title and format. No changes to computation or code were made.* 
+
+### Step 1
+First, we fill in a $10 \times 10$ matrix with all results from a gamma random variable:
+```{r}
+
+gamma_data = rgamma(n = 10**2, shape = 1, rate = 2)
+mat_1 = matrix(data = gamma_data ,nrow = 10, ncol = 10)
+mat_1
+```
+
+### Step 2
+Next, we fill in a $10 \times 10$ matrix with all results from a normal random variable:
+```{r}
+norm_data = rnorm(n = 10**2, mean = -1, sd = 4**.5)
+mat_2 = matrix(data = norm_data ,nrow = 10, ncol = 10)
+mat_2
+```
+
+### Step 3
+Next, we fill in a $10 \times 10$ matrix with all results from a uniform random variable:
+```{r}
+uni_data = runif(n = 10**2, min = 0, max = 3)
+mat_3 = matrix(data = uni_data ,nrow = 10, ncol = 10)
+mat_3
+```
+
+
+### Step 4
+Finally, we piece together the needed components from each of these three matrices for our final result.
+
+```{r}
+result = mat_1
+result[lower.tri(result)] = mat_2[lower.tri(mat_2)]
+result[upper.tri(result)] = mat_3[upper.tri(mat_3)]
+result
+```
+
+
+
+
+

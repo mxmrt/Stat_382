@@ -1,0 +1,94 @@
+---
+title: "Stat 382 - HW1 Draft"
+author: "Max Martinelli"
+date: "January 25, 2015"
+output: html_document
+background: ('#E6F8F3')
+---
+
+------------------
+
+#### 1.  Generate 100 normally distributed random variable with $\mu=0.5$ and $\sigma^2 =9$.
+ 
+```{r}
+n = 100; sample = rnorm(n, .5, 3)
+head(sample) # preview the sample
+```
+<br>
+
+####   2.  Compute the sample mean and sample variance.
+
+First, let us calculate the mean of the sample, ie $\bar{x}$.
+```{r}
+# create a function to find mean of a list of observations 
+# note: this list must have length strictly greater than 0
+my_mean = function(set){
+  total = 0
+  set_length = 0
+  for (i in set) {
+    total = i + total
+    set_length = set_length + 1
+  }
+  result = total / set_length
+  return(result)
+}
+
+x_bar = my_mean(set = sample)
+x_bar # print sample mean 
+```
+Next, we shall calculate the sample variance, ie $s^2$.
+```{r}
+# create a function to find sample variance of a list of observations 
+# note: this list must have length strictly greater than 1
+my_samp_var = function(set){
+  set_mean = my_mean(set)
+  dist = 0
+  set_length = 0
+  for (i in set) {
+    dist = dist + (i - set_mean)**2
+    set_length = set_length + 1
+  }
+  result = dist / (set_length - 1) 
+  return(result)
+}
+
+s_squared  = my_samp_var(set = sample)
+s_squared # print sample variance
+```
+
+
+<br>
+
+
+####   3.  Compute the test statistics.
+ 
+```{r}
+t = (x_bar - 0) / sqrt(s_squared / n)
+t # print t statistic 
+```
+<br>
+
+####   4.  Compute the p-value.
+ 
+```{r}
+p_value = pt(t, n-1, lower.tail = FALSE)*2
+p_value # print p-value
+```
+<br>
+
+####   5.  Use the existing function or procedure to test the hypothesis. Compare the two results.
+
+```{r}
+# compare both my_mean and built in mean function to nine digits
+#   and print boolean based on evalutation
+round(x_bar, 9) == round(mean(sample), 9)
+# compare both my_samp_var and built in var function to nine digits
+#   and print boolean based on evalutation
+round(s_squared, 9) == round(var(sample), 9)
+# compare both my p_value and t.test's p_value to nine digits
+#   and print boolean based on evalutation
+built_in_results = t.test(sample, mu=0)
+round(p_value, 9) == round(built_in_results$p.value, 9) 
+```
+
+

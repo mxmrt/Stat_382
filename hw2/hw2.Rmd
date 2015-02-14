@@ -1,0 +1,170 @@
+---
+title: "Stat 382 - HW2"
+author: "Max Martinelli"
+date: "February 8, 2015"
+output: html_document
+background: ('#E6F8F3')
+---
+
+------------------
+# Overview
+
+## Instructions
+
+Write a `SAS` Macro and `R` function to perform the following task.
+
+For a given distribution with two parameters (it can be normal, uniform, or gamma), and an integer $n$:
+
+1. Generate an $n \times n$ symmetric random matrix (say $A$). In this matrix, the elements are random variable from the given distribution. Notice that the matrix must be symmetric.
+
+2. Compute $A^{10}$. You should think about the best way to compute this. Try to save the computation time. Hint: use eigenvalue decomposition. 
+
+<br>
+
+
+
+## Preliminaries 
+
+I used some functions from the base package, and made a successful attempt to not use additional libraries such as `Matrix`. While I could have manually built a function to compute the $VDV^{-1}$ decomposition of a matrix, I felt my use of `svd` was appropriate. I initially wrote code to format a symmetric matrix, but the code used and cited below was very elegant and significantly shorter than my approach. 
+
+Surprisingly, the base package of `R` does not have a method to compute the power of a matrix. This means to verify my work would require a bit of work from the user. I do not recommend checking my results with other libraries, especially since other approaches use $VDV^{-1}$ decomposition to compute powers of a matrix (as opposed to traditional matrix multiplication). I have attempted to verify the accuracy of my work in the final section of this page.
+
+```{r}
+set.seed(30)
+```
+<br>
+
+# Approach
+
+## Step 1
+First, let us create a function `n_by_n_sym_rand_matrix` that fits the description. 
+```{r}
+
+n_by_n_sym_rand_matrix = function(dist, n, para_1, para_2){ 
+  
+  # This function takes the name of a distribution as a string
+  # to compute n-squared random variables given two parameters
+  # acceptable inputs are "normal", "uniform", and "gamma"
+  
+  if (dist == "normal") {
+    values = rnorm(n = n**2, mean = para_1, sd = para_2)}
+  if (dist == "uniform") {
+    values = runif(n = n**2, min = para_1, max = para_2)}
+  if (dist == "gamma") {
+    values = rgamma(n = n**2, shape = para_1, rate = para_2)}
+  
+  A = matrix(data = values ,nrow = n, ncol = n)
+  A[lower.tri(A)] = t(A)[lower.tri(A)] 
+  
+  # The above line of code was found at the following link:
+  #     http://stackoverflow.com/a/21825946
+  # Credit to StackOverflow user: user3318600
+  
+  return(A)
+}
+
+```
+<br>
+
+## Step 2
+
+Now, we create a second function `fast_mat_exp` which will raise the matrix to an inputted power.
+
+
+```{r}
+
+fast_mat_exp = function(mat, exp) {  
+  
+  # This function takes a matrix and raises it to the exp power
+  # This is done using the svd function to obtain the matrix's
+  # VDV^-1 decomposition.
+  
+  decomp = svd(mat)
+  D = diag(decomp$d)
+  result = decomp$u %*% D**exp %*% solve(decomp$u)
+  
+  return(result)
+}
+```
+
+<br>
+
+# Testing
+
+## Instructions 
+
+Test your `SAS` Macro and `R` function with the following set up:
+
+1. Normal distribution with $\mu =1$ and $\sigma^2 = 4$, $n=10$
+2. Uniform distribution from $[0, 3]$, and $n=15$
+3. Gamma distribution with $\alpha=1$, $\beta=1$, and $n=20$
+
+<br>
+
+## Results
+
+### Test 1
+
+```{r}
+A_1 = n_by_n_sym_rand_matrix(dist = "normal", n=10, para_1=1, para_2=4**.5)
+round(A_1,2) # preview the rounded A_1 matrix to two decimal places
+A_1_to_10 = fast_mat_exp(mat=A_1, exp=10) #construct A^10
+# preview the first 5 rows and 5 columns of A^10 with scientific notation
+format(A_1_to_10[1:5,1:5], scientific=TRUE, digits = 3) 
+```
+Now, let us test the accuracy of our `fast_mat_exp` function. We will do this by manually computing $A_1^{10}$ and then comparing the rounded entries to two decimal places. This is necessary to deal with errors that might rise from floating point.
+```{r}
+A_1_to_5_manual = A_1 %*% A_1 %*% A_1 %*% A_1 %*% A_1
+A_1_to_10_manual = A_1_to_5_manual %*% A_1_to_5_manual 
+round(A_1_to_10_manual,2) == round(A_1_to_10,2)
+```
+
+<br>
+
+
+
+### Test 2
+
+```{r}
+A_2 = n_by_n_sym_rand_matrix(dist = "uniform", n=15, para_1=0, para_2=3)
+
+# preview the first 10 rows and 10 columns rounded A_2 matrix to two decimal places
+round(A_2[1:10,1:10],2) 
+A_2_to_10 = fast_mat_exp(mat=A_2, exp=10) #construct A^10
+# preview the first 5 rows and 5 columns of A^10 with scientific notation
+format(A_2_to_10[1:5,1:5], scientific=TRUE, digits = 3) 
+```
+Again, we will test the accuracy of our computation. We will do this by manually computing the $A_2^{10}$ and then comparing the rounded entries to one decimal place. Since these matrices are very large, let us count the entries that are equal, and present it as a present it as a table.
+
+```{r}
+A_2_to_5_manual = A_2 %*% A_2 %*% A_2 %*% A_2 %*% A_2
+A_2_to_10_manual = A_2_to_5_manual %*% A_2_to_5_manual 
+results_2 = (round(A_2_to_10_manual,1) == round(A_2_to_10,1))
+table(results_2)
+```
+We see even with rounding to one decimal place, we still have some entries that are off by a bit.
+
+<br>
+
+
+
+### Test 3
+
+```{r}
+A_3 = n_by_n_sym_rand_matrix(dist = "gamma", n=20, para_1=1, para_2=1)
+
+# preview the first 10 rows and 10 columns rounded A_3 matrix to two decimal places
+round(A_3[1:10,1:10],2) 
+A_3_to_10 = fast_mat_exp(mat=A_3, exp=10) #construct A^10
+# preview the first 5 rows and 5 columns of A^10 with scientific notation
+format(A_3_to_10[1:5,1:5], scientific=TRUE, digits = 3) 
+```
+Again we will test the accuracy of our function to one decimal place.
+```{r}
+A_3_to_5_manual = A_3 %*% A_3 %*% A_3 %*% A_3 %*% A_3
+A_3_to_10_manual = A_3_to_5_manual %*% A_3_to_5_manual 
+results_3 = (round(A_3_to_10_manual,1) == round(A_3_to_10,1))
+table(results_3)
+```
+
+Here we see more discrepancies due to floating point errors. However, the errors are likely to be relatively small.
