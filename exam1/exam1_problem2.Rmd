@@ -1,5 +1,5 @@
 ---
-title: "Stat 381: Exam 1, Problem 2"
+title: "Stat 382: Exam 1, Problem 2"
 author: "Max Martinelli"
 date: "February 13, 2015"
 output: html_document

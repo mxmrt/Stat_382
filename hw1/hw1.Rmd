@@ -1,9 +1,8 @@
 ---
-title: "Stat 382 - HW1 Draft"
+title: "Stat 382 - HW1"
 author: "Max Martinelli"
 date: "January 25, 2015"
 output: html_document
-background: ('#E6F8F3')
 ---
 
 ------------------

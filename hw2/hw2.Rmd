@@ -3,7 +3,6 @@ title: "Stat 382 - HW2"
 author: "Max Martinelli"
 date: "February 8, 2015"
 output: html_document
-background: ('#E6F8F3')
 ---
 
 ------------------
