@@ -226,7 +226,7 @@ statistically significant and we fail to reject H0./
 
 Problem Restatement
 Based on the data, what is your conclusion (pertaining to 
-Calendar Effect for hockey players and date of borth?
+Calendar Effect for hockey players and date of birth)?
 
 
 Hypothesis

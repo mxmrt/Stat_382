@@ -230,7 +230,7 @@ Based on the $p-value$ we do not find the results to be statistically significan
 #### Problem Restatement
 
 > Based on the data, what is your conclusion (pertaining to 
-Calendar Effect for hockey players and date of borth?
+Calendar Effect for hockey players and date of birth)?
 
 <br>
 
