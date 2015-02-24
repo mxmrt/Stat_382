@@ -82,7 +82,7 @@ Our hypotheses are $H_0: \theta = 1$ and $H_1: \theta \neq 1$. We input the data
 substrate=array(c(15, 20, 14, 6, 8, 5, 7, 1),
                 dim = c(4, 2),
                 dimnames = list(
-                    distance = c("Vegetation", "Shoreline", "Water", "Structures"),
+                    type = c("Vegetation", "Shoreline", "Water", "Structures"),
                     bird = c("Heron", "Egret")))
 
 fisher.test(substrate, alternative = "two.sided")
@@ -229,7 +229,8 @@ Based on the $p-value$ we do not find the results to be statistically significan
 ### Problem 6
 #### Problem Restatement
 
-> What would we conclude (about this die)?
+> Based on the data, what is your conclusion (pertaining to 
+Calendar Effect for hockey players and date of borth?
 
 <br>
 
