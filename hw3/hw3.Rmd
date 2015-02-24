@@ -19,7 +19,7 @@ For each problem, write down the hypothesis and also write your conclusion. You 
 
 ### Preliminaries 
 
-For this assignment, we will use the [Fisher's Exact Test](http://en.wikipedia.org/wiki/Fisher%27s_exact_test) and the [Chi-square test](http://en.wikipedia.org/wiki/Chi-square_test).  We denote the odds ratio as $\theta$. There are six problems. See the document in the repository for more details. 
+For this assignment, we will use the [Fisher's Exact Test](http://en.wikipedia.org/wiki/Fisher%27s_exact_test) and the [Chi-square test](http://en.wikipedia.org/wiki/Chi-square_test). We denote the odds ratio as $\theta$. There are six problems. See the document in the [repository](https://github.com/mxmrt/Stat_382/tree/master/hw3) for more details. 
 
 
 <br>
